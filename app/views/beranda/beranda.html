@@ -1,0 +1,134 @@
+<div class="container-fluid">
+<div class="row">
+    <div class="col-sm-2 align">
+        <button type="button"  ng-click="actionModalAdd()" data-target="#addModal"  class="btn btn-primary" >+ Tambah</button>
+    </div>
+    
+    <div class="col-sm-3" >
+        <div class="form-group">
+            <label for="exampleFormControlSelect1">Kompartemen</label>
+            <select class="form-control" id="exampleFormControlSelect1" ng-model="filter_kompartemen" ng-change="listData(true, search, filter_kompartemen)" >
+                <option value=""  >-Pilih kompartemen-</option>
+                <option ng-repeat="list_kompartemen in kompartemens" ng-value="list_kompartemen.org_unit"  >{{list_kompartemen.org_unit_desc}} - {{list_kompartemen.org_unit}}</option>
+            </select>
+        </div>
+        
+    </div>
+
+   
+</div>
+
+<div class="" >
+
+    
+    <div class="form-group">
+        <input type="text" class="form-control" ng-model="search"  placeholder="Search Competency Issues" required>
+      </div>
+</div>
+
+    <table class="table table-bordered">
+        <tr>
+            <th>
+                NO
+            </th>
+            <th>
+                Competency Issues 
+            </th>
+            <th>
+                Nama Kompartemen 
+            </th>
+            <th>
+                Action
+            </th>
+        </tr>
+    <tr ng-if="lists.length == 0 ">
+        <td  colspan="3" class="text-center"> Data tidak ditemukan</td>
+    </tr>
+        <tr ng-repeat="list_data in lists | filter: search" >
+            
+            <td> {{$index+1}} </td>
+             <td> {{list_data.name_competency_issues}} </td>
+            <td> {{list_data.nama_kompartemen}} </td>
+            <td> <a href="" ng-click="confirmDelete(list_data)"> Delete </a> | <a href="" ng-click="actionModalUpdate(list_data)" > Edit </a>
+             </td>
+
+        </tr>
+    </table>
+
+    <div class="row justify-content-end mt-3" ng-hide="lists.length == 0" >
+        <div class="col-auto">
+            <p class="text-center fw-bold">Page {{page}} of {{lists.length}} Item</p>
+            <button ng-click="prevPage()" id="btn-prev" class="btn btn-sm btn-primary" ng-disabled="page == 1"><i class="indicator fas fa-chevron-left"></i> &nbsp;previous page </button>
+            <button ng-click="nextPage()" id="btn-next" class="btn btn-sm btn-primary" ng-hide="lists.length < 10" ng-disabled="lists.length < 10">next page&nbsp; <i class="indicator fas fa-chevron-right"></i></button>
+        </div>
+    </div>
+    
+    <div id="addModal" class="modal" tabindex="-1" data-toggle="addModal">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title">Tambah Data</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+              <div class="col-sm" >
+                <div class="form-group">
+                    <label for="exampleFormControlSelect1">Kompartemen</label>
+                    <select class="form-control" id="exampleFormControlSelect1" ng-model="addIDComp" >
+                        <option value=""  >-Pilih kompartemen-</option>
+                        <option ng-repeat="list_komp_modal in kompartemens_modal" ng-value="list_komp_modal.org_unit"  >{{list_komp_modal.org_unit_desc}} - {{list_komp_modal.org_unit}}</option>
+                    </select>
+                </div>
+
+        
+                    <div class="form-group">
+                    <label for="exampleFormControlInput1">Nama Competency Issues</label>
+                    <input type="text" class="form-control" ng-model="addNamaComp"  placeholder="Tulis Nama Competency Issues" required>
+                    </div>
+        
+                </div>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+              <button type="button" class="btn btn-primary"  ng-click="addCompetency( addNamaComp, addIDComp)" >Simpan</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    <div id="updateModal" class="modal" tabindex="-1" >
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title">Edit Data</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+              <div class="col-sm" >
+                <div class="form-group">
+                    <label for="exampleFormControlSelect1">Kompartemen</label>
+                    <select class="form-control" id="exampleFormControlSelect1" ng-model="updateKomp" >
+                        <option value=""  >-Pilih kompartemen-</option>
+                        <option ng-repeat="list_komp_modal in kompartemens_modal" ng-value="list_komp_modal.org_unit"  >{{list_komp_modal.org_unit_desc}} - {{list_komp_modal.org_unit}}</option>
+                    </select>
+                </div>
+
+        
+                    <div class="form-group">
+                    <label for="exampleFormControlInput1">Nama Competency Issues</label>
+                    <input type="text" class="form-control" ng-model="updateNama"  placeholder="Tulis Nama Competency Issues" required>
+                    </div>
+        
+                </div>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+              <button type="button" class="btn btn-primary"  ng-click="editCompetency(updateId, updateKomp, updateNama )" >Simpan</button>
+            </div>
+          </div>
+        </div>
+      </div>
+</div>
