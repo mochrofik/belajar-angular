@@ -9,8 +9,6 @@
  
       let input = angular.copy($scope.login);
 
-      console.log($scope.login);
-      console.log($scope.login.nik);
 
       let url_login = '/userlogin';
 
@@ -53,12 +51,13 @@
             var user_role = $sessionData.get("user_role");
 
 
+            console.log( "user role " + user_role);
+
+
             $state.go('app.index');
           }
 
-          console.log(res);
         }else{
-          console.log(res);
         }
       }).catch(function (err) {
 

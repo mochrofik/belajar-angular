@@ -1,15 +1,57 @@
 (function(){
   'use strict';
 
+
+  var globalConfigRouter = {
+    error: {
+      '404': '404'
+    }
+  };
+
   angular.module('myApp')
+  .run(runBlock)
   .config(config);
+
+
+  
+
+  runBlock.$inject = ['$templateCache', '$rootScope', '$state', '$stateParams', '$globalVariable', '$sessionData'];
+  function runBlock($templateCache, $rootScope, $state, $stateParams, $globalVariable, $sessionData) {
+    $rootScope.$state = $state;
+    $rootScope.$stateParams = $stateParams;
+    $rootScope.$on('$stateChangeStart', function (e, r, n) {
+    
+    });
+
+    var always_available = ['login'];
+    $rootScope.$on('$stateChangeStart', function (event, toState, toParams, fromState, fromParams, options) {
+      if (!always_available.includes(toState.name)) {
+        // console.log( 
+        //   {
+        //     "arr": always_available, 
+        //     "state": toState.name, 
+        //     "auth": !$sessionData.get("auth_key")
+        //   }
+        // );
+        if ($sessionData.get("auth") == undefined ) {
+          event.preventDefault();
+          $state.go('login');
+        }
+        if(typeof(toState.templateUrl)!== undefined){
+          $templateCache.remove(toState.templateUrl);
+        }
+      }
+    });
+    $globalVariable.configRouter = globalConfigRouter;
+  }
 
   config.$inject = ['$stateProvider', '$urlRouterProvider'];
   function config($stateProvider, $urlRouterProvider) {
     $urlRouterProvider.otherwise(
       function ($injector, $location) {
         var state = $injector.get('$state');
-        state.go('login');
+        state.go(globalConfigRouter.error['404']);
+        // state.go('login');
         return $location.path();
       }
     );
@@ -27,21 +69,33 @@
       .state('app', {
         url: '/app',
         templateUrl: 'views/layout/template.html',
-        controller: 'BerandaCtrl',
+        controller: 'DefaultCtrl',
         resolve: {
-          load: load(['controllers/beranda.js'])
+          load: load(['controllers/default.js'])
         }
       })
       .state('app.index', {
         url: '/index',
+        templateUrl: 'views/beranda/404.html',
+        // controller: 'SettingCtrl',
+        // resolve: {
+        //   load: load(['controllers/setting.js', 'sweetalert2'])
+        // }
+      })
+      .state('app.setting', {
+        url: '/setting',
         templateUrl: 'views/beranda/beranda.html',
-        controller: 'BerandaCtrl',
+        controller: 'SettingCtrl',
+       
         resolve: {
-          load: load(['controllers/beranda.js', 'sweetalert2'])
+          load: load(['controllers/setting.js', 'sweetalert2'])
         }
-      }).state("logout", {
+      })
+      
+      
+      .state("logout", {
         url: "/logout",
-        controller: function ($state, $sessionData, $globalVariable) {
+        controller: function ($state, $sessionData, ) {
           $sessionData.remove("auth");
           $sessionData.remove("employee_id");
           $sessionData.remove("auth_key");
@@ -54,8 +108,11 @@
           $sessionData.remove("data_diri");
           $sessionData.remove("id_ojt_angkatan");
           $sessionData.remove("detailProfile");
-          $globalVariable.configRouter.error["404"] = "login";
           $state.go("login");
+
+          // console.log($state);
+
+
         },
       })
 

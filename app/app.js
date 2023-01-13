@@ -5,6 +5,7 @@ angular.module('myApp', [
   'oc.lazyLoad',
   'ui.router',
   'ngCookies',
+  'ui.router.middleware',
   // 'ngRoute',
   // 'myApp.view1',
   // 'myApp.view2',
